@@ -34,12 +34,6 @@ const Team = sequelize.define( 'Team' , {
     type : Sequelize.STRING,
     allowNull : false
   }
-} , {
-  classMethods : {
-    associate : (Player) => {
-      Team.hasMany(Player);
-    }
-  }
 }  );
 
 const Player = sequelize.define( 'players' , {
@@ -67,13 +61,13 @@ const Player = sequelize.define( 'players' , {
   //   references : 'Team',
   //   referencesKey : 'id'
   // }
-} , {
-  classMethods : {
-    associate : (Team) => {
-      Player.belongsTo(Team);
-    }
-  }
+} );
+
+Player.belongsTo(Team, {
+  foreignKey: 'teamId',
+  onDelete: 'CASCADE'
 });
+
 
 /*Team.sync( {force : true} ).then( () => {
 
@@ -110,15 +104,24 @@ const Player = sequelize.define( 'players' , {
   });
   
 
-} );*/
-
-// Team.sync();
-
-Team.sync( {force : true} ).then( () => {
-  Player.sync({force : true});
-} ).catch( (err) => {
-  console.log(err);
 } );
 
-// Team.hasMany( Player , {foreignKey : 'id'} );
-// Player.belongsTo( Team );
+Player.sync( {force:true} ); */
+
+// var player = Player.build({
+//   name : 'Andres Iniesta',
+//   position : 'for',
+//   kitno : 8,
+//   country : 'Spain',
+//   teamId : 3
+// });
+
+// player.save().then( (player) => {
+//   console.log(player);
+// } , (err) => {
+//   console.log(err);
+// });
+
+Player.findAll().then( (players) => {
+  console.log(players);
+} );
